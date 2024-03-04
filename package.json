@@ -9,16 +9,29 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-three/drei": "^9.99.4",
+    "@react-three/fiber": "^8.15.16",
+    "@reduxjs/toolkit": "^2.2.1",
+    "drei": "^2.2.21",
+    "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
+    "next": "14.1.0",
+    "raw-loader": "^4.0.2",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.1.0"
+    "react-redux": "^9.1.0",
+    "use-asset": "^1.0.4"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/three": "^0.162.0",
     "eslint": "^8",
-    "eslint-config-next": "14.1.0"
+    "eslint-config-next": "14.1.0",
+    "file-loader": "^6.2.0",
+    "r3f-pack": "^2.7.3",
+    "typescript": "^5"
   }
 }
