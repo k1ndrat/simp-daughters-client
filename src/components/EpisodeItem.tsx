@@ -1,22 +1,72 @@
-const EpisodeItem = ({ data }) => {
+type props = {
+  episode: Episode;
+};
+
+const EpisodeItem = ({ episode }: props) => {
   return (
-    <li className={itemClass} onContextMenu={handleWatchedClick}>
-      <a href={""} target="_blank" rel="noreferrer" className="item__link">
-        <div className="item__number">{data.episode}</div>
+    <li
+      style={{
+        position: "relative",
+        borderRadius: "5px",
+        transition: "all 0.3s ease 0s",
+        // display: "flex",
+        gap: "15px",
+        fontSize: "16px",
+        fontWeight: "500",
+        listStyle: "none",
+        hover: {
+          backgroundColor: "blue",
+        },
+      }}
+    >
+      <a
+        href={episode.link}
+        target="_blank"
+        rel="noreferrer"
+        style={{
+          transition: "all 0.3s ease 0s",
+          borderRadius: " 0.3125rem",
+          padding: "0.625rem 0.9375rem",
+          width: "100%",
+          display: "flex",
+          gap: "0.9375rem",
+          zIndex: "2",
+          backgroundColor: "#354051",
+        }}
+      >
+        <div className="item__number">{episode.episode}</div>
         <div className="item__title-body">
-          <div className="item__title-episode">{data.title}</div>
+          <div className="item__title-episode">{episode.title}</div>
         </div>
       </a>
 
-      <div className="item__actives">
-        <button onClick={() => handleLikeClick(true)}>
+      <div
+        className="item__actives"
+        style={{
+          position: "absolute",
+          width: "100%",
+          backgroundColor: "#1a2028",
+          left: "0",
+          bottom: "0",
+          height: "40px",
+          zIndex: "-1",
+          borderRadius: "0.3125rem",
+          transition: "all 0.3s ease 0s",
+          padding: "0.625rem 0.9375rem",
+          display: "flex",
+          justifyContent: "space-evenly",
+          gap: "1rem",
+          alignItems: "center",
+        }}
+      >
+        <button>
           <svg
             className="item__like"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
             width={24}
             style={{
-              fill: dataState?.state?.isLiked === true ? "#fc477e" : "",
+              fill: episode?.state?.isLiked === true ? "#fc477e" : "",
             }}
           >
             <path d="M24,11.034a2.5,2.5,0,0,0-2.5-2.5H15.189a.25.25,0,0,1-.237-.328,8.684,8.684,0,0,0,.52-4.407c-.588-2.095-1.834-2.7-2.809-2.565A2,2,0,0,0,11,3.284C11,6.03,8.871,9.03,6.966,10.345a.5.5,0,0,0-.216.412V20.873a.5.5,0,0,0,.405.491c.357.069.681.135.987.2a17.309,17.309,0,0,0,4.108.471h6.5c1.957,0,2.25-1.1,2.25-1.75a2.24,2.24,0,0,0-.232-.994,2.248,2.248,0,0,0,1-3A2.252,2.252,0,0,0,23,14.284a2.226,2.226,0,0,0-.273-1.072A2.5,2.5,0,0,0,24,11.034Z"></path>
@@ -24,7 +74,7 @@ const EpisodeItem = ({ data }) => {
           </svg>
         </button>
 
-        <button onClick={() => handleLikeClick(false)}>
+        <button>
           <svg
             className="item__dislike"
             viewBox="0 0 24 24"
@@ -32,7 +82,7 @@ const EpisodeItem = ({ data }) => {
             width={24}
             style={{
               transform: "rotateZ(180deg)",
-              fill: dataState?.state?.isLiked === false ? "#fc477e" : "",
+              fill: episode?.state?.isLiked === false ? "#fc477e" : "",
             }}
           >
             <path d="M24,11.034a2.5,2.5,0,0,0-2.5-2.5H15.189a.25.25,0,0,1-.237-.328,8.684,8.684,0,0,0,.52-4.407c-.588-2.095-1.834-2.7-2.809-2.565A2,2,0,0,0,11,3.284C11,6.03,8.871,9.03,6.966,10.345a.5.5,0,0,0-.216.412V20.873a.5.5,0,0,0,.405.491c.357.069.681.135.987.2a17.309,17.309,0,0,0,4.108.471h6.5c1.957,0,2.25-1.1,2.25-1.75a2.24,2.24,0,0,0-.232-.994,2.248,2.248,0,0,0,1-3A2.252,2.252,0,0,0,23,14.284a2.226,2.226,0,0,0-.273-1.072A2.5,2.5,0,0,0,24,11.034Z"></path>
@@ -40,14 +90,14 @@ const EpisodeItem = ({ data }) => {
           </svg>
         </button>
 
-        <button onClick={handleOnLaterClick}>
+        <button>
           <svg
             className="item__later"
             viewBox="0 0 48 48"
             xmlns="http://www.w3.org/2000/svg"
-            xlink="http://www.w3.org/1999/xlink"
+            // xlink="http://www.w3.org/1999/xlink"
             width={24}
-            fill={dataState?.state?.isForLater === true ? "#fc477e" : ""}
+            fill={episode?.state?.isForLater === true ? "#fc477e" : ""}
           >
             <defs>
               <path d="M0 0h48v48H0V0z" id="a"></path>

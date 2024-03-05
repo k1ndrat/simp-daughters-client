@@ -1,17 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
-// import testReducer from "./testSlice";
 import authReducer from "../features/auth/authSlice";
-// import userReducer from "../features/user/userSlice";
 import { apiSlice } from "./api/apiSlice";
+import episodeReducer from "@/features/episode/episodeSlice";
 // import { rtkQueryErrorLogger } from "./middleware";
 
 export const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
-    // test: testReducer,
     auth: authReducer,
-    // user: userReducer,
+    episode: episodeReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware),

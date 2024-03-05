@@ -4,21 +4,21 @@ import { Suspense, lazy, useEffect, useState } from "react";
 import { logOut, selectCurrentTokens } from "@/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useRouter } from "next/navigation";
+import { Canvas } from "@react-three/fiber";
 
 import Cookies from "js-cookie";
 import Link from "next/link";
-import { Canvas } from "@react-three/fiber";
 import Simpson from "@/models/Simpson";
-
-// const Simpson = lazy(() => import("@/models/Simpson"));
+import useAuth from "@/hooks/useAuth";
 
 const NavBar = () => {
   const router = useRouter();
 
-  const [isAuth, setIsAuth] = useState<boolean>(false);
+  const isAuth = useAuth();
+  // const [isAuth, setIsAuth] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
-  const tokens = useAppSelector(selectCurrentTokens);
+  // const tokens = useAppSelector(selectCurrentTokens);
 
   const handleLogout = () => {
     Cookies.remove("tokens");
@@ -27,9 +27,9 @@ const NavBar = () => {
     router.push("/login");
   };
 
-  useEffect(() => {
-    setIsAuth(Object.keys(tokens).length !== 0);
-  }, [tokens]);
+  // useEffect(() => {
+  //   setIsAuth(Object.keys(tokens).length !== 0);
+  // }, [tokens]);
 
   return (
     <header

@@ -27,25 +27,6 @@ export const authApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
-
-    //DIVIDER
-
-    // sendLogout: builder.mutation({
-    //   query: () => ({
-    //     url: "/auth/logout",
-    //     method: "POST",
-    //   }),
-    //   async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-    //     try {
-    //       await queryFulfilled;
-    //       Cookies.remove("tokens");
-    //       dispatch(logOut({}));
-    //       dispatch(apiSlice.util.resetApiState());
-    //     } catch (err) {
-    //       console.log(err);
-    //     }
-    //   },
-    // }),
     refresh: builder.mutation({
       query: () => ({
         url: "/auth/refresh",
@@ -71,6 +52,5 @@ export const {
   useRegisterMutation,
   useLoginMutation,
   useMeMutation,
-  // useSendLogoutMutation,
   useRefreshMutation,
 } = authApiSlice;
