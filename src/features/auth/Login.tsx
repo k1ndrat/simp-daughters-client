@@ -37,7 +37,7 @@ const Login = () => {
       dispatch(setTokens({ tokens }));
       Cookies.set("tokens", JSON.stringify(tokens), { expires: 7 });
 
-      router.push("/profile");
+      router.push("/");
     } catch (error) {}
   };
 

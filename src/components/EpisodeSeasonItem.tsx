@@ -1,22 +1,29 @@
+import { Box } from "@mui/material";
 import EpisodeItem from "./EpisodeItem";
 
 type props = {
   season: Episode[];
+  setOptimisticEpisodes: any;
 };
 
-const EpisodeSeasonItem = ({ season }: props) => {
+const EpisodeSeasonItem = ({ season, setOptimisticEpisodes }: props) => {
   return (
-    <ul
-      style={{
+    <Box
+      component="ul"
+      sx={{
         display: "flex",
         flexDirection: "column",
         gap: "10px",
       }}
     >
       {season.map((ep) => (
-        <EpisodeItem episode={ep} />
+        <EpisodeItem
+          key={ep._id}
+          episode={ep}
+          setOptimisticEpisodes={setOptimisticEpisodes}
+        />
       ))}
-    </ul>
+    </Box>
   );
 };
 

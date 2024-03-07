@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import Simpson from "@/models/Simpson";
 import useAuth from "@/hooks/useAuth";
+import { Button, ButtonProps, styled } from "@mui/material";
 
 const NavBar = () => {
   const router = useRouter();
@@ -31,15 +32,31 @@ const NavBar = () => {
   //   setIsAuth(Object.keys(tokens).length !== 0);
   // }, [tokens]);
 
+  const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    color: "white",
+    backgroundColor: "rgb(156, 39, 176)",
+    "&:hover": {
+      backgroundColor: "#7B1FA2",
+    },
+  }));
+
   return (
     <header
       style={{
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        maxWidth: "1600px",
+        margin: "0 auto",
+        padding: "0 15px",
       }}
     >
-      <Link href={"/"} style={{ width: "200px" }}>
+      <Link
+        href={"/"}
+        style={{
+          width: "75px",
+        }}
+      >
         <Canvas
           camera={{ fov: 30, near: 0.1, far: 1000 }}
           style={{
@@ -63,7 +80,18 @@ const NavBar = () => {
           </Suspense>
         </Canvas>
       </Link>
-      {isAuth && <button onClick={handleLogout}>Log Out</button>}
+      {isAuth && (
+        <>
+          <Button
+            variant="outlined"
+            // sx={{ color: "white" }}
+            onClick={handleLogout}
+          >
+            Log Out
+          </Button>
+          {/* <ColorButton variant="contained">Suka</ColorButton> */}
+        </>
+      )}
     </header>
   );
 };

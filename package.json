@@ -9,17 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@react-three/drei": "^9.99.4",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.15.12",
+    "@react-three/drei": "^9.99.7",
     "@react-three/fiber": "^8.15.16",
     "@reduxjs/toolkit": "^2.2.1",
-    "drei": "^2.2.21",
+    "drei": "^0.0.45",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
-    "next": "14.1.0",
+    "next": "^14.1.0",
     "raw-loader": "^4.0.2",
     "react": "^18",
     "react-dom": "^18",
     "react-redux": "^9.1.0",
+    "three": "^0.162.0",
     "use-asset": "^1.0.4"
   },
   "devDependencies": {

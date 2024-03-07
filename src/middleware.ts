@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const protectedRoutes = ["/profile"];
+const protectedRoutes = ["/profile", "/"];
 const authRoutes = ["/login"];
 
 export default function middleware(req: any) {
@@ -15,7 +15,7 @@ export default function middleware(req: any) {
   }
 
   if (tokens?.accessToken && authRoutes.includes(req.nextUrl.pathname)) {
-    const absoluteUrl = new URL("/profile", req.nextUrl.origin);
+    const absoluteUrl = new URL("/", req.nextUrl.origin);
     return NextResponse.redirect(absoluteUrl.toString());
   }
 

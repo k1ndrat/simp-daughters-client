@@ -1,29 +1,33 @@
+import { Box, Typography } from "@mui/material";
+
 type props = {
   episode: Episode;
+  setOptimisticEpisodes: any;
 };
 
-const EpisodeItem = ({ episode }: props) => {
+const EpisodeItem = ({ episode, setOptimisticEpisodes }: props) => {
+  const handleLike = () => {};
+
   return (
-    <li
-      style={{
+    <Box
+      component={"li"}
+      sx={{
         position: "relative",
         borderRadius: "5px",
         transition: "all 0.3s ease 0s",
-        // display: "flex",
+        display: "flex",
         gap: "15px",
         fontSize: "16px",
         fontWeight: "500",
         listStyle: "none",
-        hover: {
-          backgroundColor: "blue",
-        },
       }}
     >
-      <a
+      <Box
+        component="a"
         href={episode.link}
         target="_blank"
         rel="noreferrer"
-        style={{
+        sx={{
           transition: "all 0.3s ease 0s",
           borderRadius: " 0.3125rem",
           padding: "0.625rem 0.9375rem",
@@ -32,24 +36,25 @@ const EpisodeItem = ({ episode }: props) => {
           gap: "0.9375rem",
           zIndex: "2",
           backgroundColor: "#354051",
+          "&:hover": {
+            backgroundColor: "blue",
+          },
         }}
       >
-        <div className="item__number">{episode.episode}</div>
-        <div className="item__title-body">
-          <div className="item__title-episode">{episode.title}</div>
-        </div>
-      </a>
+        <Typography className="item__number">{episode.episode}</Typography>
+        <Typography className="item__title-episode">{episode.title}</Typography>
+      </Box>
 
-      <div
-        className="item__actives"
-        style={{
+      <Box
+        component="div"
+        sx={{
           position: "absolute",
           width: "100%",
           backgroundColor: "#1a2028",
           left: "0",
           bottom: "0",
-          height: "40px",
-          zIndex: "-1",
+          height: "44px",
+          zIndex: "0",
           borderRadius: "0.3125rem",
           transition: "all 0.3s ease 0s",
           padding: "0.625rem 0.9375rem",
@@ -111,8 +116,8 @@ const EpisodeItem = ({ episode }: props) => {
             ></path>
           </svg>
         </button>
-      </div>
-    </li>
+      </Box>
+    </Box>
   );
 };
 
