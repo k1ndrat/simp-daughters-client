@@ -8,7 +8,11 @@ interface Episode {
 }
 
 interface State {
-  isLiked: boolean;
-  isWatched: boolean;
-  isForLater: boolean;
+  isLiked: boolean | undefined;
+  isWatched: boolean | undefined;
+  isForLater: boolean | undefined;
 }
+
+type Episodes = {
+  [season: string]: Episode[];
+};

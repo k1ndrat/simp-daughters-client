@@ -49,12 +49,19 @@ const NavBar = () => {
         maxWidth: "1600px",
         margin: "0 auto",
         padding: "0 15px",
+        position: "fixed",
+        width: "100%",
+        left: 0,
+        t: 0,
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        zIndex: 50,
       }}
     >
       <Link
         href={"/"}
         style={{
           width: "75px",
+          overflow: "none",
         }}
       >
         <Canvas
@@ -63,6 +70,7 @@ const NavBar = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            overflow: "none",
             // backgroundColor: "wheat",
           }}
         >

@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLoginMutation } from "./authApiSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { setTokens } from "./authSlice";
 
 import Cookies from "js-cookie";
+import useAuth from "@/hooks/useAuth";
 
 interface CredType {
   username: string;
@@ -22,6 +23,7 @@ const Login = () => {
   const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const isAuth = useAuth();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -40,6 +42,12 @@ const Login = () => {
       router.push("/");
     } catch (error) {}
   };
+
+  useEffect(() => {
+    console.log(isAuth);
+
+    isAuth && router.push("/");
+  }, [isAuth]);
 
   return (
     <div>

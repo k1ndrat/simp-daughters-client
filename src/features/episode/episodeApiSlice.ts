@@ -10,7 +10,15 @@ export const episodeApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    updateState: builder.mutation({
+      query: (credentials) => ({
+        url: `/episode/state/${credentials.episodeId}`,
+        method: "POST",
+        body: credentials.state,
+      }),
+    }),
   }),
 });
 
-export const { useGetEpisodesMutation } = episodeApiSlice;
+export const { useGetEpisodesMutation, useUpdateStateMutation } =
+  episodeApiSlice;

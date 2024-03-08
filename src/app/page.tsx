@@ -35,7 +35,7 @@ export default function Home() {
     <main style={{}}>
       <Container
         style={{
-          margin: "0 auto",
+          margin: "7rem auto 0",
           padding: "0 15px",
           maxWidth: "1500px",
           paddingTop: "50px",
@@ -49,7 +49,8 @@ export default function Home() {
           Object.keys(episodes).map((key) => (
             <EpisodeSeasonItem
               key={key}
-              season={episodes[key]}
+              episodes={episodes[key]}
+              season={key}
               setOptimisticEpisodes={setOptimisticEpisodes}
             />
           ))}
