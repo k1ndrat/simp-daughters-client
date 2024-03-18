@@ -10,7 +10,7 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import Simpson from "@/models/Simpson";
 import useAuth from "@/hooks/useAuth";
-import { Button, ButtonProps, styled } from "@mui/material";
+import { Box, Button, ButtonProps, Container, styled } from "@mui/material";
 
 const NavBar = () => {
   const router = useRouter();
@@ -43,63 +43,69 @@ const NavBar = () => {
   return (
     <header
       style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        maxWidth: "1600px",
-        margin: "0 auto",
         padding: "0 15px",
         position: "fixed",
         width: "100%",
         left: 0,
-        t: 0,
+        top: 0,
         backgroundColor: "rgba(0, 0, 0, 0.8)",
         zIndex: 50,
       }}
     >
-      <Link
-        href={"/"}
+      <Container
+        component={"div"}
         style={{
-          width: "75px",
-          overflow: "none",
+          maxWidth: "1600px",
+          margin: "0 auto",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
-        <Canvas
-          camera={{ fov: 30, near: 0.1, far: 1000 }}
+        <Link
+          href={"/"}
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            width: "75px",
             overflow: "none",
-            // backgroundColor: "wheat",
           }}
         >
-          <Suspense fallback={"loading"}>
-            {/* <OrbitControls /> */}
-            <directionalLight intensity={2} />
-            <hemisphereLight intensity={0.5} />
-            {/* <directionalLight
-            color="orange"
-            position={[0, 0, 5]}
-            intensity={0.2}
-          /> */}
-
-            <Simpson />
-          </Suspense>
-        </Canvas>
-      </Link>
-      {isAuth && (
-        <>
-          <Button
-            variant="outlined"
-            // sx={{ color: "white" }}
-            onClick={handleLogout}
+          <Canvas
+            camera={{ fov: 30, near: 0.1, far: 1000 }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "none",
+              // backgroundColor: "wheat",
+            }}
           >
-            Log Out
-          </Button>
-          {/* <ColorButton variant="contained">Suka</ColorButton> */}
-        </>
-      )}
+            <Suspense fallback={"loading"}>
+              {/* <OrbitControls /> */}
+              <directionalLight intensity={2} />
+              <hemisphereLight intensity={0.5} />
+              {/* <directionalLight
+              color="orange"
+              position={[0, 0, 5]}
+              intensity={0.2}
+            /> */}
+
+              <Simpson />
+            </Suspense>
+          </Canvas>
+        </Link>
+        {isAuth && (
+          <>
+            <Button
+              variant="outlined"
+              sx={{ color: "white" }}
+              onClick={handleLogout}
+            >
+              Log Out
+            </Button>
+            {/* <ColorButton variant="contained">Suka</ColorButton> */}
+          </>
+        )}
+      </Container>
     </header>
   );
 };

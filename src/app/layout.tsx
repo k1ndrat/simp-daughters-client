@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Providers from "@/store/Provider";
 import NavBar from "@/components/NavBar";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "@/theme/theme";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,10 +21,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning={true}>
-        <Providers>
-          <NavBar />
-          <main>{children}</main>
-        </Providers>
+        <ThemeProvider theme={theme}>
+          <Providers>
+            {/* <NavBar /> */}
+            <main>{children}</main>
+          </Providers>
+        </ThemeProvider>
       </body>
     </html>
   );

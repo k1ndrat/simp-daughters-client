@@ -4,10 +4,10 @@ import { useState } from "react";
 
 type props = {
   episode: Episode;
-  setOptimisticEpisodes: any;
+  setCountWatched: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const EpisodeItem = ({ episode }: props) => {
+const EpisodeItem = ({ episode, setCountWatched }: props) => {
   // const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
   //   color: "white",
   //   backgroundColor: "rgb(156, 39, 176)",
@@ -48,6 +48,44 @@ const EpisodeItem = ({ episode }: props) => {
     });
   };
 
+  const handleWatched = async (
+    e: React.MouseEvent<HTMLLIElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+
+    setCountWatched((prev) => (state?.isWatched ? prev - 1 : prev + 1));
+
+    const newState: State = {
+      ...state,
+      isWatched: !state?.isWatched,
+      isForLater: false,
+    };
+
+    setState(newState);
+
+    await updateState({
+      episodeId: episode._id,
+      state: newState,
+    });
+  };
+
+  const handleForLater = async () => {
+    setCountWatched((prev) => (state?.isWatched ? prev - 1 : prev));
+
+    const newState: State = {
+      ...state,
+      isForLater: !state?.isForLater,
+      isWatched: false,
+    };
+
+    setState(newState);
+
+    await updateState({
+      episodeId: episode._id,
+      state: newState,
+    });
+  };
+
   return (
     <Box
       component={"li"}
@@ -65,6 +103,7 @@ const EpisodeItem = ({ episode }: props) => {
           boxShadow: "#1a2028 0px 0px 20px 5px",
         },
       }}
+      onContextMenu={handleWatched}
     >
       <Box
         component="a"
@@ -79,9 +118,18 @@ const EpisodeItem = ({ episode }: props) => {
           display: "flex",
           gap: "0.9375rem",
           zIndex: "2",
-          backgroundColor: "#354051",
+          backgroundColor:
+            !state?.isWatched && !state?.isForLater
+              ? "#354051"
+              : state?.isForLater
+              ? "#00a2ff"
+              : episode.episode % 2 === 0
+              ? "#ebb926"
+              : "#fbcf48",
+          color: !state?.isWatched ? "white" : "#354051",
           "&:hover": {
             backgroundColor: "#fc477e",
+            color: "white",
           },
         }}
       >
@@ -108,7 +156,12 @@ const EpisodeItem = ({ episode }: props) => {
           alignItems: "center",
         }}
       >
-        <Button onClick={handleLike}>
+        <Button
+          onClick={handleLike}
+          sx={{
+            color: "#fc477e",
+          }}
+        >
           <svg
             className="item__like"
             viewBox="0 0 24 24"
@@ -116,6 +169,7 @@ const EpisodeItem = ({ episode }: props) => {
             width={24}
             style={{
               fill: state?.isLiked === true ? "#fc477e" : "",
+
               transition: "all 0.3s ease 0s",
             }}
           >
@@ -124,7 +178,12 @@ const EpisodeItem = ({ episode }: props) => {
           </svg>
         </Button>
 
-        <Button onClick={handleDisLike}>
+        <Button
+          onClick={handleDisLike}
+          sx={{
+            color: "#fc477e",
+          }}
+        >
           <svg
             className="item__dislike"
             viewBox="0 0 24 24"
@@ -141,13 +200,21 @@ const EpisodeItem = ({ episode }: props) => {
           </svg>
         </Button>
 
-        <Button>
+        <Button
+          onClick={handleForLater}
+          sx={{
+            color: "#fc477e",
+          }}
+        >
           <svg
             className="item__later"
             viewBox="0 0 48 48"
             xmlns="http://www.w3.org/2000/svg"
             width={24}
-            fill={episode?.state?.isForLater === true ? "#fc477e" : ""}
+            style={{
+              fill: state?.isForLater === true ? "#fc477e" : "",
+              transition: "all 0.3s ease 0s",
+            }}
           >
             <defs>
               <path d="M0 0h48v48H0V0z" id="a"></path>
