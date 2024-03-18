@@ -54,20 +54,22 @@ const LoginForm = () => {
 
   return (
     <motion.form
-      autoComplete="false"
-      initial={{ x: -800, scale: 1 }}
-      animate={{ x: 0, scale: 1 }}
+      autoComplete="new-password"
+      initial={{ x: -800, scale: 0.75, opacity: 0 }}
+      animate={{ x: 0, scale: 1, opacity: 1 }}
       transition={{
         type: "spring",
         stiffness: 50,
         // damping: 20,
-        delay: 1,
+        delay: 1.25,
         duration: 1,
       }}
       onSubmit={handleSubmit}
       style={{
         height: "100vh",
         maxWidth: "700px",
+        // width: "50vw",
+        // minWidth: "290px",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -82,10 +84,11 @@ const LoginForm = () => {
 
       <TextField
         // color="secondary"
-        autoComplete="false"
+        autoComplete="new-password"
         type="text"
         name="username"
         // label="Username"
+        placeholder="Input username"
         variant="outlined"
         value={credentials.username}
         onChange={(e) => {
@@ -95,23 +98,24 @@ const LoginForm = () => {
           input: { color: "white" },
           "& .MuiOutlinedInput-root": {
             "& fieldset": {
-              // borderColor: "white",
-            },
-            "&:hover fieldset": {
-              borderColor: "rgba(255, 255, 255, 0.7)",
+              borderColor: "rgba(255, 255, 255, 0.5)",
               transition: "all 0.3s ease",
             },
+            "&:hover fieldset": {
+              borderColor: "rgba(255, 255, 255, 0.8)",
+            },
             "&.Mui-focused fieldset": {
-              borderColor: "rgba(255, 255, 255, 0.9)",
+              borderColor: "rgba(255, 255, 255, 1)",
             },
           },
         }}
       />
       <TextField
-        autoComplete="false"
+        autoComplete="new-password"
         color="secondary"
         type="password"
         name="password"
+        placeholder="Input password"
         value={credentials.password}
         onChange={(e) => {
           setCredentials((prev) => ({ ...prev, password: e.target.value }));
@@ -120,14 +124,14 @@ const LoginForm = () => {
           input: { color: "white" },
           "& .MuiOutlinedInput-root": {
             "& fieldset": {
-              // borderColor: "white",
-            },
-            "&:hover fieldset": {
-              borderColor: "rgba(255, 255, 255, 0.7)",
+              borderColor: "rgba(255, 255, 255, 0.5)",
               transition: "all 0.3s ease",
             },
+            "&:hover fieldset": {
+              borderColor: "rgba(255, 255, 255, 0.8)",
+            },
             "&.Mui-focused fieldset": {
-              borderColor: "rgba(255, 255, 255, 0.9)",
+              borderColor: "rgba(255, 255, 255, 1)",
             },
           },
         }}

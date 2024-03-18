@@ -18,7 +18,8 @@ const LoginPage = () => {
       component={"div"}
       sx={
         {
-          // height: "100vh",
+          // display: "grid",
+          // placeContent: "center",
         }
       }
     >

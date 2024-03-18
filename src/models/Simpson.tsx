@@ -34,14 +34,14 @@ const Simpson = () => {
     <group>
       <mesh ref={myMesh} position={[0, -1, 0]} rotation={[0, 0, 0]} scale={1.5}>
         <primitive object={scene} />
-        <mesh scale={[0.01, 0.01, 1]} position={[0.074, 0.975, 0.5]}>
+        {/* <mesh scale={[0.01, 0.01, 1]} position={[0.074, 0.975, 0.5]}>
           <boxGeometry />
           <meshStandardMaterial color="red" />
         </mesh>
         <mesh scale={[0.01, 0.01, 1]} position={[-0.074, 0.975, 0.5]}>
           <boxGeometry />
           <meshStandardMaterial color="red" />
-        </mesh>
+        </mesh> */}
       </mesh>
     </group>
   );

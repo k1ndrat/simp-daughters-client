@@ -82,7 +82,7 @@ const EpisodeSeasonItem = ({ episodes, season }: props) => {
       >
         {episodes.map((ep) => (
           <EpisodeItem
-            key={ep._id}
+            key={season + "_" + ep._id}
             episode={ep}
             setCountWatched={setCountWatched}
           />
