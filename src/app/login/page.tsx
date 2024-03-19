@@ -16,12 +16,13 @@ const LoginPage = () => {
   return (
     <Box
       component={"div"}
-      sx={
-        {
-          // display: "grid",
-          // placeContent: "center",
-        }
-      }
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        // justifyContent: "center",
+        justifyContent: "flex-start",
+      }}
     >
       <video
         autoPlay
@@ -32,7 +33,7 @@ const LoginPage = () => {
           objectFit: "cover",
           width: "100vw",
           height: "100vh",
-          position: "absolute",
+          position: "fixed",
           left: 0,
           top: 0,
           zIndex: -1,
@@ -42,7 +43,7 @@ const LoginPage = () => {
         style={{
           width: "100vw",
           height: "100vh",
-          position: "absolute",
+          position: "fixed",
           left: 0,
           top: 0,
           zIndex: -1,

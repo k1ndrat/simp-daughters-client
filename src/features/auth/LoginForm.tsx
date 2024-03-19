@@ -11,6 +11,7 @@ import useAuth from "@/hooks/useAuth";
 import {
   Alert,
   AlertColor,
+  Box,
   Button,
   Snackbar,
   TextField,
@@ -18,9 +19,11 @@ import {
 } from "@mui/material";
 
 import { motion } from "framer-motion";
+import TextInput from "@/components/TextInput";
 
 interface CredType {
-  username: string;
+  username?: string;
+  email: string;
   password: string;
   confirmPassword?: string;
 }
@@ -34,6 +37,7 @@ interface IAlertSettings {
 const LoginForm = () => {
   const [credentials, setCredentials] = useState<CredType>({
     username: "",
+    email: "",
     password: "",
     confirmPassword: "",
   });
@@ -65,7 +69,7 @@ const LoginForm = () => {
   const loginForm = async () => {
     try {
       const tokens = await login({
-        username: credentials.username,
+        username: credentials.email,
         password: credentials.password,
       }).unwrap();
 
@@ -75,7 +79,21 @@ const LoginForm = () => {
       Cookies.set("tokens", JSON.stringify(tokens), { expires: 7 });
 
       router.push("/");
-    } catch (error) {}
+    } catch (error: any) {
+      let result;
+      if (Array.isArray(error.data.message)) {
+        result = error.data.message[0];
+      } else {
+        result = error.data.message;
+      }
+
+      result = result.charAt(0).toUpperCase() + result.slice(1);
+      setAlertSettings({
+        open: true,
+        text: result,
+        severity: "error",
+      });
+    }
   };
 
   const registerForm = async () => {
@@ -83,7 +101,7 @@ const LoginForm = () => {
       try {
         const tokens = await register({
           name: credentials.username,
-          email: credentials.username,
+          email: credentials.email,
           password: credentials.password,
         }).unwrap();
 
@@ -152,10 +170,9 @@ const LoginForm = () => {
       }}
       onSubmit={handleSubmit}
       style={{
-        height: "100vh",
         maxWidth: "700px",
-        // width: "50vw",
-        // minWidth: "290px",
+        width: "100vw",
+        minWidth: "290px",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -183,37 +200,38 @@ const LoginForm = () => {
         {isRegister ? "Sign Up" : "Login"}
       </Typography>
 
-      <TextField
-        // color="secondary"
-        autoComplete="new-password"
-        type="text"
-        name="username"
-        // label="Username"
-        placeholder="Input username"
+      {isRegister && (
+        <TextInput
+          color="secondary"
+          type="text"
+          label="Username"
+          name="Username"
+          placeholder="Input username"
+          value={credentials.username}
+          onChange={(e) => {
+            setCredentials((prev) => ({
+              ...prev,
+              username: e.target.value,
+            }));
+          }}
+        />
+      )}
+
+      <TextInput
+        type="email"
+        name="email"
+        label="Email"
+        placeholder="Input email"
         variant="outlined"
-        value={credentials.username}
+        value={credentials.email}
         onChange={(e) => {
-          setCredentials((prev) => ({ ...prev, username: e.target.value }));
-        }}
-        sx={{
-          input: { color: "white" },
-          "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              borderColor: "rgba(255, 255, 255, 0.5)",
-              transition: "all 0.3s ease",
-            },
-            "&:hover fieldset": {
-              borderColor: "rgba(255, 255, 255, 0.8)",
-            },
-            "&.Mui-focused fieldset": {
-              borderColor: "rgba(255, 255, 255, 1)",
-            },
-          },
+          setCredentials((prev) => ({ ...prev, email: e.target.value }));
         }}
       />
-      <TextField
-        autoComplete="new-password"
+
+      <TextInput
         color="secondary"
+        label="Password"
         type="password"
         name="password"
         placeholder="Input password"
@@ -221,28 +239,13 @@ const LoginForm = () => {
         onChange={(e) => {
           setCredentials((prev) => ({ ...prev, password: e.target.value }));
         }}
-        sx={{
-          input: { color: "white" },
-          "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              borderColor: "rgba(255, 255, 255, 0.5)",
-              transition: "all 0.3s ease",
-            },
-            "&:hover fieldset": {
-              borderColor: "rgba(255, 255, 255, 0.8)",
-            },
-            "&.Mui-focused fieldset": {
-              borderColor: "rgba(255, 255, 255, 1)",
-            },
-          },
-        }}
       />
 
       {isRegister && (
-        <TextField
-          autoComplete="new-password"
+        <TextInput
           color="secondary"
           type="password"
+          label="Confirm Password"
           name="confirm-password"
           placeholder="Input password"
           value={credentials.confirmPassword}
@@ -251,21 +254,6 @@ const LoginForm = () => {
               ...prev,
               confirmPassword: e.target.value,
             }));
-          }}
-          sx={{
-            input: { color: "white" },
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "rgba(255, 255, 255, 0.5)",
-                transition: "all 0.3s ease",
-              },
-              "&:hover fieldset": {
-                borderColor: "rgba(255, 255, 255, 0.8)",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "rgba(255, 255, 255, 1)",
-              },
-            },
           }}
         />
       )}
@@ -282,12 +270,21 @@ const LoginForm = () => {
         {isRegister ? "Sign Up" : "Login"}
       </Button>
 
-      <Typography
+      <Button
+        type="button"
         sx={{
-          userSelect: "none",
-          cursor: "pointer",
+          color: "white",
+          padding: "1rem",
+          // justifyContent: "flex-start",
+          // textTransform: "none",
         }}
         onClick={() => {
+          setCredentials({
+            username: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+          });
           if (isRegister) {
             setType("Login");
           } else {
@@ -296,9 +293,9 @@ const LoginForm = () => {
         }}
       >
         {isRegister
-          ? "Already have account? Pls login!"
-          : "Don`t have account? Pls create it!"}
-      </Typography>
+          ? "Already have account? Login!"
+          : "Don't have an account? Sign Up!"}
+      </Button>
     </motion.form>
   );
 };
