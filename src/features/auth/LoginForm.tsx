@@ -2,28 +2,52 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useLoginMutation } from "./authApiSlice";
+import { useLoginMutation, useRegisterMutation } from "./authApiSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { setTokens } from "./authSlice";
 
 import Cookies from "js-cookie";
 import useAuth from "@/hooks/useAuth";
-import { Button, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  AlertColor,
+  Button,
+  Snackbar,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 import { motion } from "framer-motion";
 
 interface CredType {
   username: string;
   password: string;
+  confirmPassword?: string;
+}
+
+interface IAlertSettings {
+  open: boolean;
+  text: string;
+  severity: AlertColor;
 }
 
 const LoginForm = () => {
   const [credentials, setCredentials] = useState<CredType>({
     username: "",
     password: "",
+    confirmPassword: "",
   });
 
+  const [type, setType] = useState<"Login" | "Register">("Login");
+  const [alertSettings, setAlertSettings] = useState<IAlertSettings>({
+    open: false,
+    text: "",
+    severity: "success",
+  });
+  const isRegister = type === "Register";
+
   const [login] = useLoginMutation();
+  const [register] = useRegisterMutation();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const isAuth = useAuth();
@@ -31,6 +55,14 @@ const LoginForm = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
+    if (isRegister) {
+      await registerForm();
+    } else {
+      await loginForm();
+    }
+  };
+
+  const loginForm = async () => {
     try {
       const tokens = await login({
         username: credentials.username,
@@ -44,6 +76,60 @@ const LoginForm = () => {
 
       router.push("/");
     } catch (error) {}
+  };
+
+  const registerForm = async () => {
+    if (credentials.password === credentials.confirmPassword) {
+      try {
+        const tokens = await register({
+          name: credentials.username,
+          email: credentials.username,
+          password: credentials.password,
+        }).unwrap();
+
+        setType("Login");
+
+        setAlertSettings({
+          open: true,
+          text: "You are successfully registered!",
+          severity: "success",
+        });
+      } catch (error: any) {
+        let result;
+        if (Array.isArray(error.data.message)) {
+          result = error.data.message[0];
+        } else {
+          result = error.data.message;
+        }
+
+        result = result.charAt(0).toUpperCase() + result.slice(1);
+        setAlertSettings({
+          open: true,
+          text: result,
+          severity: "error",
+        });
+      }
+    } else {
+      setAlertSettings({
+        open: true,
+        text: "Passwords doesn`t match!",
+        severity: "error",
+      });
+    }
+  };
+
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setAlertSettings((prev) => ({
+      ...prev,
+      open: false,
+    }));
   };
 
   useEffect(() => {
@@ -78,8 +164,23 @@ const LoginForm = () => {
         color: "white !important",
       }}
     >
+      <Snackbar
+        open={alertSettings.open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={handleClose}
+          severity={alertSettings.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {alertSettings.text}
+        </Alert>
+      </Snackbar>
+
       <Typography variant="h2" sx={{ textTransform: "uppercase" }}>
-        Login
+        {isRegister ? "Sign Up" : "Login"}
       </Typography>
 
       <TextField
@@ -137,6 +238,38 @@ const LoginForm = () => {
         }}
       />
 
+      {isRegister && (
+        <TextField
+          autoComplete="new-password"
+          color="secondary"
+          type="password"
+          name="confirm-password"
+          placeholder="Input password"
+          value={credentials.confirmPassword}
+          onChange={(e) => {
+            setCredentials((prev) => ({
+              ...prev,
+              confirmPassword: e.target.value,
+            }));
+          }}
+          sx={{
+            input: { color: "white" },
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "rgba(255, 255, 255, 0.5)",
+                transition: "all 0.3s ease",
+              },
+              "&:hover fieldset": {
+                borderColor: "rgba(255, 255, 255, 0.8)",
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "rgba(255, 255, 255, 1)",
+              },
+            },
+          }}
+        />
+      )}
+
       <Button
         type="submit"
         color="secondary"
@@ -146,8 +279,26 @@ const LoginForm = () => {
           padding: "1rem",
         }}
       >
-        Login
+        {isRegister ? "Sign Up" : "Login"}
       </Button>
+
+      <Typography
+        sx={{
+          userSelect: "none",
+          cursor: "pointer",
+        }}
+        onClick={() => {
+          if (isRegister) {
+            setType("Login");
+          } else {
+            setType("Register");
+          }
+        }}
+      >
+        {isRegister
+          ? "Already have account? Pls login!"
+          : "Don`t have account? Pls create it!"}
+      </Typography>
     </motion.form>
   );
 };
