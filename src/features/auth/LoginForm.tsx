@@ -69,7 +69,7 @@ const LoginForm = () => {
   const loginForm = async () => {
     try {
       const tokens = await login({
-        username: credentials.email,
+        email: credentials.email,
         password: credentials.password,
       }).unwrap();
 
