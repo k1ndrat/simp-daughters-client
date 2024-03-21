@@ -58,6 +58,7 @@ const LoginForm = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    handleClose();
 
     if (isRegister) {
       await registerForm();
@@ -137,7 +138,7 @@ const LoginForm = () => {
   };
 
   const handleClose = (
-    event: React.SyntheticEvent | Event,
+    event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
     if (reason === "clickaway") {

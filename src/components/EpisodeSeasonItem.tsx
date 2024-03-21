@@ -62,7 +62,7 @@ const EpisodeSeasonItem = ({ episodes, season }: props) => {
             fontSize: "1.875rem",
           }}
         >
-          {season} Сезон
+          Season {season}
         </Typography>
         <Typography
           sx={{

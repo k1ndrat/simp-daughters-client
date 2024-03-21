@@ -10,6 +10,18 @@ export const episodeApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    getOnLaterEpisodes: builder.mutation({
+      query: () => ({
+        url: "/episode/onlater",
+        method: "GET",
+      }),
+    }),
+    getLikedEpisodes: builder.mutation({
+      query: () => ({
+        url: "/episode/liked",
+        method: "GET",
+      }),
+    }),
     updateState: builder.mutation({
       query: (credentials) => ({
         url: `/episode/state/${credentials.episodeId}`,
@@ -20,5 +32,9 @@ export const episodeApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetEpisodesMutation, useUpdateStateMutation } =
-  episodeApiSlice;
+export const {
+  useGetEpisodesMutation,
+  useUpdateStateMutation,
+  useGetOnLaterEpisodesMutation,
+  useGetLikedEpisodesMutation,
+} = episodeApiSlice;

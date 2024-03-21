@@ -10,23 +10,7 @@ import React, { useEffect } from "react";
 import EpisodeSeasonItem from "./EpisodeSeasonItem";
 import Loader from "./Loader";
 
-const Episodes = () => {
-  const isAuth = useAuth();
-
-  const dispatch = useAppDispatch();
-  const episodes: any = useAppSelector(selectCurrentEpisodes) || {};
-  const [getEpisodes, { isLoading }] = useGetEpisodesMutation();
-
-  useEffect(() => {
-    const getData = async () => {
-      const data: any = await getEpisodes({});
-
-      dispatch(setEpisodes({ episodes: data.data }));
-    };
-
-    isAuth && getData();
-  }, [isAuth]);
-
+const Episodes = ({ isLoading, episodes }: any) => {
   return (
     <>
       {isLoading && <Loader />}

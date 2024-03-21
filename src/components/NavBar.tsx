@@ -7,10 +7,18 @@ import { useRouter } from "next/navigation";
 import { Canvas } from "@react-three/fiber";
 
 import Cookies from "js-cookie";
-import Link from "next/link";
+// import Link from "next/link";
 import Simpson from "@/models/Simpson";
 import useAuth from "@/hooks/useAuth";
-import { Box, Button, ButtonProps, Container, styled } from "@mui/material";
+import {
+  Box,
+  Button,
+  ButtonProps,
+  Container,
+  Typography,
+  styled,
+} from "@mui/material";
+import Link from "next/link";
 
 const NavBar = () => {
   const router = useRouter();
@@ -94,7 +102,39 @@ const NavBar = () => {
           </Canvas>
         </Link>
         {isAuth && (
-          <>
+          <Box
+            component={"div"}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: "2.5rem",
+            }}
+          >
+            <Link href={"/onlater"}>
+              <Typography
+                sx={{
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    color: "#00a2ff",
+                  },
+                }}
+              >
+                On Later
+              </Typography>
+            </Link>
+            <Link href={"/liked"}>
+              <Typography
+                sx={{
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    color: "#00a2ff",
+                  },
+                }}
+              >
+                Liked
+              </Typography>
+            </Link>
+
             <Button
               variant="outlined"
               sx={{ color: "white" }}
@@ -102,8 +142,7 @@ const NavBar = () => {
             >
               Log Out
             </Button>
-            {/* <ColorButton variant="contained">Suka</ColorButton> */}
-          </>
+          </Box>
         )}
       </Container>
     </header>

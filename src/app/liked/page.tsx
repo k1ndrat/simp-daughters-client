@@ -1,6 +1,5 @@
 "use client";
 
-import "./globals.css";
 import NavBar from "@/components/NavBar";
 import Episodes from "@/components/Episodes";
 import useAuth from "@/hooks/useAuth";
@@ -9,15 +8,15 @@ import {
   selectCurrentEpisodes,
   setEpisodes,
 } from "@/features/episode/episodeSlice";
-import { useGetEpisodesMutation } from "@/features/episode/episodeApiSlice";
+import { useGetLikedEpisodesMutation } from "@/features/episode/episodeApiSlice";
 import { useEffect } from "react";
 
-export default function Home() {
+export default function OnLater() {
   const isAuth = useAuth();
 
   const dispatch = useAppDispatch();
   const episodes: any = useAppSelector(selectCurrentEpisodes) || {};
-  const [getEpisodes, { isLoading }] = useGetEpisodesMutation();
+  const [getEpisodes, { isLoading }] = useGetLikedEpisodesMutation();
 
   useEffect(() => {
     const getData = async () => {
