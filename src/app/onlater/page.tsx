@@ -16,7 +16,7 @@ export default function OnLater() {
 
   const dispatch = useAppDispatch();
   const episodes: any = useAppSelector(selectCurrentEpisodes) || {};
-  const [getEpisodes, { isLoading }] = useGetOnLaterEpisodesMutation();
+  const [getEpisodes, { isLoading, status }] = useGetOnLaterEpisodesMutation();
 
   useEffect(() => {
     const getData = async () => {
@@ -32,7 +32,12 @@ export default function OnLater() {
     <>
       <NavBar />
       <main>
-        <Episodes isLoading={isLoading} episodes={episodes} />
+        <Episodes
+          isLoading={isLoading}
+          episodes={episodes}
+          usePercentage={false}
+          status={status}
+        />
       </main>
     </>
   );

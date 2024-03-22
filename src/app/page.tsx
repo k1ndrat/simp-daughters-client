@@ -16,8 +16,9 @@ export default function Home() {
   const isAuth = useAuth();
 
   const dispatch = useAppDispatch();
-  const episodes: any = useAppSelector(selectCurrentEpisodes) || {};
-  const [getEpisodes, { isLoading }] = useGetEpisodesMutation();
+  const episodes: any = useAppSelector(selectCurrentEpisodes);
+  const [getEpisodes, { isLoading, status }] = useGetEpisodesMutation();
+  console.log(status);
 
   useEffect(() => {
     const getData = async () => {
@@ -33,7 +34,7 @@ export default function Home() {
     <>
       <NavBar />
       <main>
-        <Episodes isLoading={isLoading} episodes={episodes} />
+        <Episodes isLoading={isLoading} episodes={episodes} status={status} />
       </main>
     </>
   );

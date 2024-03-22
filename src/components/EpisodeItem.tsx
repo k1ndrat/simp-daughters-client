@@ -1,5 +1,5 @@
 import { useUpdateStateMutation } from "@/features/episode/episodeApiSlice";
-import { Box, Button, ButtonProps, Typography, styled } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
 
 type props = {
@@ -8,14 +8,6 @@ type props = {
 };
 
 const EpisodeItem = ({ episode, setCountWatched }: props) => {
-  // const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  //   color: "white",
-  //   backgroundColor: "rgb(156, 39, 176)",
-  //   "&:hover": {
-  //     backgroundColor: "#7B1FA2",
-  //   },
-  // }));
-
   const [updateState] = useUpdateStateMutation();
 
   const [state, setState] = useState<State>(episode.state as State);

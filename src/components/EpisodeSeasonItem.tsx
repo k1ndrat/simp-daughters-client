@@ -6,9 +6,10 @@ import { motion } from "framer-motion";
 type props = {
   episodes: Episode[];
   season: string;
+  usePercentage: boolean;
 };
 
-const EpisodeSeasonItem = ({ episodes, season }: props) => {
+const EpisodeSeasonItem = ({ episodes, season, usePercentage }: props) => {
   const watchedEpisodes = episodes.filter((ep) => ep.state?.isWatched).length;
 
   const [countWatched, setCountWatched] = useState<number>(watchedEpisodes);
@@ -54,6 +55,7 @@ const EpisodeSeasonItem = ({ episodes, season }: props) => {
             top: 0,
             transition: "all 0.3s ease",
             zIndex: -1,
+            opacity: usePercentage ? 1 : 0,
           },
         }}
       >
@@ -64,13 +66,15 @@ const EpisodeSeasonItem = ({ episodes, season }: props) => {
         >
           Season {season}
         </Typography>
-        <Typography
-          sx={{
-            fontSize: "1.25rem",
-          }}
-        >
-          {Math.round((countWatched / episodes.length) * 10000) / 100}%
-        </Typography>
+        {usePercentage && (
+          <Typography
+            sx={{
+              fontSize: "1.25rem",
+            }}
+          >
+            {Math.round((countWatched / episodes.length) * 10000) / 100}%
+          </Typography>
+        )}
       </Box>
       <Box
         component="ul"
