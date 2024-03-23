@@ -1,33 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const protectedRoutes = ["/profile", "/"];
+const protectedRoutes = ["/profile", "/", "/onlater", "/liked"];
 const authRoutes = ["/login"];
 
 export default async function middleware(req: NextRequest) {
-  let tokens = {} as Tokens;
+  // social auth with searchParam
+  const tokensParams = req.nextUrl.searchParams.get("tokens");
 
-  //
-  let refreshToken = req.nextUrl.searchParams.get("refreshToken");
-
-  if (refreshToken) {
-    const data = await fetch(
-      (process.env.NEXT_PUBLIC_BASE_URL + "/auth/refresh") as string,
-      {
-        method: "POST",
-        headers: {
-          authorization: `REFRESH ${refreshToken}`,
-        },
-      }
-    );
-
-    const res = await data.json();
-
+  if (tokensParams) {
     const response = NextResponse.redirect(req.nextUrl.origin);
-    response.cookies.set("tokens", JSON.stringify(res));
+
+    response.cookies.set("tokens", tokensParams, {
+      maxAge: 60 * 60 * 24 * 7,
+    });
     return response;
   }
 
   // cookies tokens
+  let tokens = {} as Tokens;
+
   if (req.cookies.get("tokens")?.value) {
     tokens = JSON.parse(req.cookies.get("tokens")?.value as string);
   }

@@ -2,6 +2,7 @@ import { Container, Typography } from "@mui/material";
 import EpisodeSeasonItem from "./EpisodeSeasonItem";
 import Loader from "./Loader";
 import { QueryStatus } from "@reduxjs/toolkit/query";
+import { motion } from "framer-motion";
 
 interface props {
   status: QueryStatus;
@@ -33,15 +34,23 @@ const Episodes = ({
             gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
             gap: "30px",
           }}
+          onContextMenu={(e) => {
+            e.preventDefault();
+          }}
         >
           {isEmpty && (
-            <Typography
-              sx={{
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{
+                duration: 1,
+              }}
+              style={{
                 textAlign: "center",
               }}
             >
               There are no episodes here yet
-            </Typography>
+            </motion.div>
           )}
 
           {!isEmpty &&

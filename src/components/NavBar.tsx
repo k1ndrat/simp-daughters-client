@@ -24,10 +24,8 @@ const NavBar = () => {
   const router = useRouter();
 
   const isAuth = useAuth();
-  // const [isAuth, setIsAuth] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
 
-  // const tokens = useAppSelector(selectCurrentTokens);
+  const dispatch = useAppDispatch();
 
   const handleLogout = () => {
     Cookies.remove("tokens");
@@ -36,22 +34,9 @@ const NavBar = () => {
     router.push("/login");
   };
 
-  // useEffect(() => {
-  //   setIsAuth(Object.keys(tokens).length !== 0);
-  // }, [tokens]);
-
-  const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
-    color: "white",
-    backgroundColor: "rgb(156, 39, 176)",
-    "&:hover": {
-      backgroundColor: "#7B1FA2",
-    },
-  }));
-
   return (
     <header
       style={{
-        padding: "0 15px",
         position: "fixed",
         width: "100%",
         left: 0,
@@ -64,6 +49,7 @@ const NavBar = () => {
         component={"div"}
         style={{
           maxWidth: "1600px",
+          padding: "0 15px",
           margin: "0 auto",
           display: "flex",
           justifyContent: "space-between",
@@ -80,11 +66,11 @@ const NavBar = () => {
           <Canvas
             camera={{ fov: 30, near: 0.1, far: 1000 }}
             style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              overflow: "none",
-              // backgroundColor: "wheat",
+              // display: "flex",
+              // alignItems: "center",
+              // justifyContent: "center",
+              // overflow: "none",
+              transition: "all 0.3s ease",
             }}
           >
             <Suspense fallback={"loading"}>

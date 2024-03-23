@@ -1,7 +1,7 @@
 "use client";
 
 import LoginForm from "@/features/auth/LoginForm";
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, useMediaQuery } from "@mui/material";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import { useState } from "react";
@@ -12,6 +12,8 @@ const LoginPage = () => {
   const handleMute = () => {
     setIsMute((prev) => !prev);
   };
+
+  const matches = useMediaQuery("(min-width:480px)");
 
   return (
     <Box
@@ -61,14 +63,14 @@ const LoginPage = () => {
         {isMute ? (
           <VolumeOffIcon
             sx={{
-              fontSize: "3rem",
+              fontSize: matches ? "3rem" : "2rem",
               color: "white",
             }}
           />
         ) : (
           <VolumeUpIcon
             sx={{
-              fontSize: "3rem",
+              fontSize: matches ? "3rem" : "2rem",
               color: "white",
             }}
           />

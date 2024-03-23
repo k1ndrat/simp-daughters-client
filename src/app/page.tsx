@@ -18,7 +18,6 @@ export default function Home() {
   const dispatch = useAppDispatch();
   const episodes: any = useAppSelector(selectCurrentEpisodes);
   const [getEpisodes, { isLoading, status }] = useGetEpisodesMutation();
-  console.log(status);
 
   useEffect(() => {
     const getData = async () => {
