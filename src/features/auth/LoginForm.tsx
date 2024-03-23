@@ -20,6 +20,7 @@ import {
 
 import { motion } from "framer-motion";
 import TextInput from "@/components/TextInput";
+import Link from "next/link";
 
 interface CredType {
   username?: string;
@@ -270,6 +271,21 @@ const LoginForm = () => {
       >
         {isRegister ? "Sign Up" : "Login"}
       </Button>
+
+      <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/google`}>
+        <Button
+          type="button"
+          color="secondary"
+          variant="outlined"
+          sx={{
+            width: "100%",
+            color: "white",
+            padding: "1rem",
+          }}
+        >
+          GOOGLE
+        </Button>
+      </Link>
 
       <Button
         type="button"
