@@ -287,6 +287,21 @@ const LoginForm = () => {
         </Button>
       </Link>
 
+      <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/facebook`}>
+        <Button
+          type="button"
+          color="secondary"
+          variant="outlined"
+          sx={{
+            width: "100%",
+            color: "white",
+            padding: "1rem",
+          }}
+        >
+          Facebook
+        </Button>
+      </Link>
+
       <Button
         type="button"
         sx={{

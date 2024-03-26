@@ -11,6 +11,7 @@ import {
 } from "@/features/episode/episodeSlice";
 import { useGetEpisodesMutation } from "@/features/episode/episodeApiSlice";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const isAuth = useAuth();
@@ -18,6 +19,8 @@ export default function Home() {
   const dispatch = useAppDispatch();
   const episodes: any = useAppSelector(selectCurrentEpisodes);
   const [getEpisodes, { isLoading, status }] = useGetEpisodesMutation();
+
+  const router = useRouter();
 
   useEffect(() => {
     const getData = async () => {
@@ -27,6 +30,11 @@ export default function Home() {
     };
 
     isAuth && getData();
+
+    // remove hash from facebook redirect
+    if (window.location.hash === "#_=_") {
+      router.push("/");
+    }
   }, [isAuth]);
 
   return (
