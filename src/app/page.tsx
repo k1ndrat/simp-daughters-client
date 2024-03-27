@@ -14,7 +14,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const isAuth = useAuth();
+  const { isAuth } = useAuth();
 
   const dispatch = useAppDispatch();
   const episodes: any = useAppSelector(selectCurrentEpisodes);

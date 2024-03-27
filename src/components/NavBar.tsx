@@ -11,19 +11,28 @@ import Cookies from "js-cookie";
 import Simpson from "@/models/Simpson";
 import useAuth from "@/hooks/useAuth";
 import {
+  Avatar,
   Box,
   Button,
   ButtonProps,
   Container,
+  Divider,
+  IconButton,
+  ListItemIcon,
+  // ListItemIcon,
+  Menu,
+  MenuItem,
+  Tooltip,
   Typography,
   styled,
 } from "@mui/material";
 import Link from "next/link";
+import { Logout, PersonAdd, Settings } from "@mui/icons-material";
 
 const NavBar = () => {
   const router = useRouter();
 
-  const isAuth = useAuth();
+  const { isAuth, tokens } = useAuth();
 
   const dispatch = useAppDispatch();
 
@@ -32,6 +41,15 @@ const NavBar = () => {
     dispatch(logOut({}));
 
     router.push("/login");
+  };
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -121,13 +139,92 @@ const NavBar = () => {
               </Typography>
             </Link>
 
-            <Button
+            {/* <Button
               variant="outlined"
               sx={{ color: "white" }}
               onClick={handleLogout}
             >
               Log Out
-            </Button>
+            </Button> */}
+
+            <Tooltip title={tokens.user?.email}>
+              <IconButton
+                onClick={handleClick}
+                size="small"
+                aria-controls={open ? "account-menu" : undefined}
+                aria-expanded={open ? "true" : undefined}
+              >
+                <Avatar
+                  sx={{
+                    width: 42,
+                    height: 42,
+                    userSelect: "none",
+                    backgroundColor: "#00a2ff",
+                  }}
+                >
+                  {tokens.user?.name[0]}
+                </Avatar>
+              </IconButton>
+            </Tooltip>
+
+            <Menu
+              anchorEl={anchorEl}
+              id="account-menu"
+              open={open}
+              onClose={handleClose}
+              onClick={handleClose}
+              sx={{
+                overflow: "visible",
+                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                mt: 1.5,
+                "& .MuiAvatar-root": {
+                  width: 32,
+                  height: 32,
+                  ml: -0.5,
+                  mr: 1,
+                },
+                // "&::before": {
+                //   content: '""',
+                //   display: "block",
+                //   position: "absolute",
+                //   top: 0,
+                //   right: 14,
+                //   width: 10,
+                //   height: 10,
+                //   bgcolor: "background.paper",
+                //   transform: "translateY(-50%) rotate(45deg)",
+                //   zIndex: 0,
+                // },
+              }}
+              transformOrigin={{ horizontal: "right", vertical: "top" }}
+              anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+            >
+              <MenuItem onClick={handleClose} href="profile">
+                <Avatar /> {tokens.user?.name}
+              </MenuItem>
+              {/* <MenuItem onClick={handleClose}>
+                <Avatar /> My account
+              </MenuItem> */}
+              <Divider />
+              {/* <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <PersonAdd fontSize="small" />
+                </ListItemIcon>
+                Add another account
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <Settings fontSize="small" />
+                </ListItemIcon>
+                Settings
+              </MenuItem> */}
+              <MenuItem onClick={handleLogout}>
+                <ListItemIcon>
+                  <Logout fontSize="small" />
+                </ListItemIcon>
+                Logout
+              </MenuItem>
+            </Menu>
           </Box>
         )}
       </Container>

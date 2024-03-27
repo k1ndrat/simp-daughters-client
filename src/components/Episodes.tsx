@@ -17,6 +17,7 @@ const Episodes = ({
   episodes,
   usePercentage = true,
 }: props) => {
+  // if (!episodes) return <p>console.error</p>;
   const isEmpty = Object.keys(episodes).length === 0;
 
   return (

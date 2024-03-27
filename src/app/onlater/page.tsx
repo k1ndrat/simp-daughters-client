@@ -12,7 +12,7 @@ import { useGetOnLaterEpisodesMutation } from "@/features/episode/episodeApiSlic
 import { useEffect } from "react";
 
 export default function OnLater() {
-  const isAuth = useAuth();
+  const { isAuth } = useAuth();
 
   const dispatch = useAppDispatch();
   const episodes: any = useAppSelector(selectCurrentEpisodes) || {};

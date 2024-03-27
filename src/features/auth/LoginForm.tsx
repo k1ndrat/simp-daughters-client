@@ -55,7 +55,7 @@ const LoginForm = () => {
   const [register] = useRegisterMutation();
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const isAuth = useAuth();
+  const { isAuth } = useAuth();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -287,7 +287,7 @@ const LoginForm = () => {
         </Button>
       </Link>
 
-      <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/facebook`}>
+      {/* <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}/facebook`}>
         <Button
           type="button"
           color="secondary"
@@ -300,7 +300,7 @@ const LoginForm = () => {
         >
           Facebook
         </Button>
-      </Link>
+      </Link> */}
 
       <Button
         type="button"
