@@ -105,7 +105,7 @@ const NavBar = () => {
             </Suspense>
           </Canvas>
         </Link>
-        {isAuth && (
+        {isAuth && tokens.user && (
           <Box
             component={"div"}
             sx={{
@@ -160,9 +160,15 @@ const NavBar = () => {
                     height: 42,
                     userSelect: "none",
                     backgroundColor: "#00a2ff",
+                    fontSize: "1rem",
                   }}
+                  src={tokens?.user?.picture && tokens.user.picture}
+                  alt={tokens.user?.name}
                 >
-                  {tokens.user?.name[0]}
+                  {tokens.user?.name.split(" ")[0][0]}
+                  {tokens.user?.name.split(" ").length > 1
+                    ? tokens.user?.name.split(" ")[1][0]
+                    : ""}
                 </Avatar>
               </IconButton>
             </Tooltip>
@@ -200,7 +206,7 @@ const NavBar = () => {
               anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
               <MenuItem onClick={handleClose} href="profile">
-                <Avatar /> {tokens.user?.name}
+                <Avatar src={tokens.user?.picture} /> {tokens.user?.name}
               </MenuItem>
               {/* <MenuItem onClick={handleClose}>
                 <Avatar /> My account
