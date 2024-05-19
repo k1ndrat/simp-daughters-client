@@ -34,15 +34,11 @@ const baseQueryWithReauth = async (
     // send the refresh token to get a new access token
     const state = api.getState() as RootState;
 
-    const refreshToken = state.auth.tokens?.refreshToken;
-
     const refreshData = await fetch(
       (process.env.NEXT_PUBLIC_BASE_URL + "/auth/refresh") as string,
       {
         method: "POST",
-        headers: {
-          authorization: `REFRESH ${refreshToken}`,
-        },
+        credentials: "include",
       }
     );
 

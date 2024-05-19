@@ -5,25 +5,24 @@ import { QueryStatus } from "@reduxjs/toolkit/query";
 import { motion } from "framer-motion";
 
 interface props {
-  status: QueryStatus;
+  isSuccess: boolean;
   isLoading: boolean;
   episodes: any;
   usePercentage?: boolean;
 }
 
 const Episodes = ({
-  status,
+  isSuccess,
   isLoading,
   episodes,
   usePercentage = true,
 }: props) => {
-  // if (!episodes) return <p>console.error</p>;
-  const isEmpty = Object.keys(episodes).length === 0;
+  const isEmpty = episodes && Object.keys(episodes).length === 0;
 
   return (
     <>
       {isLoading && <Loader />}
-      {!isLoading && status === "fulfilled" && (
+      {!isLoading && isSuccess && (
         <Container
           style={{
             margin: "7rem auto 0",

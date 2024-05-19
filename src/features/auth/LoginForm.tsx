@@ -1,33 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLoginMutation, useRegisterMutation } from "./authApiSlice";
-import { useAppDispatch } from "@/store/hooks";
-import { setTokens } from "./authSlice";
-
-import Cookies from "js-cookie";
-import useAuth from "@/hooks/useAuth";
-import {
-  Alert,
-  AlertColor,
-  Box,
-  Button,
-  Snackbar,
-  TextField,
-  Typography,
-} from "@mui/material";
-
+import { Alert, AlertColor, Button, Snackbar, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import TextInput from "@/components/TextInput";
 import Link from "next/link";
-
-interface CredType {
-  username?: string;
-  email: string;
-  password: string;
-  confirmPassword?: string;
-}
 
 interface IAlertSettings {
   open: boolean;
@@ -36,108 +15,79 @@ interface IAlertSettings {
 }
 
 const LoginForm = () => {
-  const [credentials, setCredentials] = useState<CredType>({
+  const router = useRouter();
+
+  const [credentials, setCredentials] = useState<ICredentials>({
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
-
   const [type, setType] = useState<"Login" | "Register">("Login");
-  const [alertSettings, setAlertSettings] = useState<IAlertSettings>({
-    open: false,
-    text: "",
-    severity: "success",
-  });
   const isRegister = type === "Register";
 
-  const [login] = useLoginMutation();
-  const [register] = useRegisterMutation();
-  const dispatch = useAppDispatch();
-  const router = useRouter();
-  const { isAuth } = useAuth();
+  const [alertSettings, setAlertSettings] = useState<IAlertSettings>(
+    {} as IAlertSettings
+  );
 
-  const handleSubmit = async (e: any) => {
+  const [
+    login,
+    { error: loginErorr, isError: isLoginError, isSuccess: isLoginSuccess },
+  ] = useLoginMutation();
+  const [
+    register,
+    {
+      error: registerErorr,
+      isError: isRegisterError,
+      isSuccess: isRegisterSuccess,
+    },
+  ] = useRegisterMutation();
+
+  // submit form
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleClose();
 
     if (isRegister) {
-      await registerForm();
-    } else {
-      await loginForm();
-    }
-  };
-
-  const loginForm = async () => {
-    try {
-      const tokens = await login({
-        email: credentials.email,
-        password: credentials.password,
-      }).unwrap();
-
-      console.log(tokens);
-
-      dispatch(setTokens({ tokens }));
-      Cookies.set("tokens", JSON.stringify(tokens), { expires: 7 });
-
-      router.push("/");
-    } catch (error: any) {
-      let result;
-      if (Array.isArray(error.data.message)) {
-        result = error.data.message[0];
-      } else {
-        result = error.data.message;
-      }
-
-      result = result.charAt(0).toUpperCase() + result.slice(1);
-      setAlertSettings({
-        open: true,
-        text: result,
-        severity: "error",
-      });
-    }
-  };
-
-  const registerForm = async () => {
-    if (credentials.password === credentials.confirmPassword) {
-      try {
-        const tokens = await register({
+      if (credentials.password === credentials.confirmPassword) {
+        await register({
           name: credentials.username,
           email: credentials.email,
           password: credentials.password,
-        }).unwrap();
-
-        setType("Login");
-
-        setAlertSettings({
-          open: true,
-          text: "You are successfully registered!",
-          severity: "success",
         });
-      } catch (error: any) {
-        let result;
-        if (Array.isArray(error.data.message)) {
-          result = error.data.message[0];
-        } else {
-          result = error.data.message;
-        }
-
-        result = result.charAt(0).toUpperCase() + result.slice(1);
+      } else {
         setAlertSettings({
           open: true,
-          text: result,
+          text: "Passwords doesn`t match!",
           severity: "error",
         });
       }
     } else {
-      setAlertSettings({
-        open: true,
-        text: "Passwords doesn`t match!",
-        severity: "error",
+      await login({
+        email: credentials.email,
+        password: credentials.password,
       });
     }
   };
 
+  // func for creating alert for error
+  const handleError = (error: IError) => {
+    let result;
+    if (Array.isArray(error.data.message)) {
+      result = error.data.message[0];
+    } else {
+      result = error.data.message;
+    }
+
+    result = result.charAt(0).toUpperCase() + result.slice(1);
+    setAlertSettings({
+      open: true,
+      text: result,
+      severity: "error",
+    });
+  };
+
+  // close alert
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -152,11 +102,30 @@ const LoginForm = () => {
     }));
   };
 
-  useEffect(() => {
-    console.log(isAuth);
+  // when user is logged in push to main page
+  isLoginSuccess && router.push("/");
 
-    isAuth && router.push("/");
-  }, [isAuth]);
+  // when error run func for creating alert
+  useEffect(() => {
+    if (!isRegister && isLoginError && loginErorr) {
+      handleError(loginErorr);
+    } else if (isRegister && isRegisterError && registerErorr) {
+      handleError(registerErorr);
+    }
+  }, [isLoginError, isRegisterError, loginErorr, registerErorr]);
+
+  // when user is registered propose login and create alert
+  useEffect(() => {
+    if (isRegisterSuccess) {
+      setType("Login");
+
+      setAlertSettings({
+        open: true,
+        text: "You are successfully registered!",
+        severity: "success",
+      });
+    }
+  }, [isRegisterSuccess]);
 
   return (
     <motion.form
@@ -307,8 +276,6 @@ const LoginForm = () => {
         sx={{
           color: "white",
           padding: "1rem",
-          // justifyContent: "flex-start",
-          // textTransform: "none",
         }}
         onClick={() => {
           setCredentials({

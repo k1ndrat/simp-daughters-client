@@ -4,23 +4,14 @@ import { apiSlice } from "@/store/api/apiSlice";
 
 export const episodeApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getEpisodes: builder.mutation({
-      query: () => ({
-        url: "/episode",
-        method: "GET",
-      }),
+    getEpisodes: builder.query<Episodes, null>({
+      query: () => ({ url: `/episode` }),
     }),
-    getOnLaterEpisodes: builder.mutation({
-      query: () => ({
-        url: "/episode/onlater",
-        method: "GET",
-      }),
+    getOnLaterEpisodes: builder.query<Episodes, null>({
+      query: () => ({ url: `/episode/onlater` }),
     }),
-    getLikedEpisodes: builder.mutation({
-      query: () => ({
-        url: "/episode/liked",
-        method: "GET",
-      }),
+    getLikedEpisodes: builder.query<Episodes, null>({
+      query: () => ({ url: `/episode/liked` }),
     }),
     updateState: builder.mutation({
       query: (credentials) => ({
@@ -33,8 +24,8 @@ export const episodeApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetEpisodesMutation,
+  useGetEpisodesQuery,
   useUpdateStateMutation,
-  useGetOnLaterEpisodesMutation,
-  useGetLikedEpisodesMutation,
+  useGetOnLaterEpisodesQuery,
+  useGetLikedEpisodesQuery,
 } = episodeApiSlice;

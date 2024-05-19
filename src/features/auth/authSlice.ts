@@ -15,6 +15,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     tokens: tokens,
+    error: "",
   },
   reducers: {
     setTokens: (state, action) => {
@@ -25,10 +26,13 @@ const authSlice = createSlice({
       state.tokens = {} as Tokens;
       // Cookies.remove("tokens");
     },
+    setError: (state, action) => {
+      state.error = action.payload;
+    },
   },
 });
 
-export const { setTokens, logOut } = authSlice.actions;
+export const { setTokens, logOut, setError } = authSlice.actions;
 
 export default authSlice.reducer;
 

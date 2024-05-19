@@ -8,3 +8,10 @@ interface User {
   // updatedAt: Date;
   // deletedAt: Date;
 }
+
+interface ICredentials {
+  username?: string;
+  email: string;
+  password: string;
+  confirmPassword?: string;
+}

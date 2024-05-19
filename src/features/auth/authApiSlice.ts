@@ -3,7 +3,7 @@
 import Cookies from "js-cookie";
 
 import { apiSlice } from "@/store/api/apiSlice";
-import { setTokens } from "./authSlice";
+import { setError, setTokens } from "./authSlice";
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -20,6 +20,18 @@ export const authApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: { ...credentials },
       }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          console.log(data);
+          dispatch(setTokens({ tokens: data }));
+          Cookies.set("tokens", JSON.stringify(data), {
+            expires: 7,
+          });
+        } catch (error) {
+          // console.log(error);
+        }
+      },
     }),
     me: builder.mutation({
       query: (credentials) => ({
@@ -52,5 +64,5 @@ export const {
   useRegisterMutation,
   useLoginMutation,
   useMeMutation,
-  useRefreshMutation,
+  // useRefreshMutation,
 } = authApiSlice;
