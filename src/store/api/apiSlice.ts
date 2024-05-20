@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
-import { logOut, setTokens } from "@/features/auth/authSlice";
+import { logOut, setTokens, setUser } from "@/features/auth/authSlice";
 
 import Cookies from "js-cookie";
 
@@ -13,10 +13,10 @@ const baseQuery = fetchBaseQuery({
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const state = getState() as RootState;
-    const token = state.auth.tokens?.accessToken;
-    if (token) {
-      headers.set("Authorization", `Bearer ${token}`);
-    }
+    const token = state.auth.accessToken;
+
+    headers.set("Authorization", `Bearer ${token}`);
+
     return headers;
   },
 });
@@ -31,9 +31,6 @@ const baseQueryWithReauth = async (
   if (result?.error?.status === 403) {
     console.log("sending refresh token");
 
-    // send the refresh token to get a new access token
-    const state = api.getState() as RootState;
-
     const refreshData = await fetch(
       (process.env.NEXT_PUBLIC_BASE_URL + "/auth/refresh") as string,
       {
@@ -45,11 +42,11 @@ const baseQueryWithReauth = async (
     const refreshResult: Tokens = await refreshData.json();
 
     if (refreshResult) {
-      Cookies.set("tokens", JSON.stringify(refreshResult), {
-        expires: 7,
-      });
+      localStorage.setItem("accessToken", refreshResult.accessToken);
+
       // store the new token
-      api.dispatch(setTokens({ tokens: refreshResult }));
+      api.dispatch(setTokens(refreshResult.accessToken));
+      api.dispatch(setUser(refreshResult.user));
 
       // retry the original query with the new access token
       result = await baseQuery(args, api, extraOptions);
@@ -63,5 +60,6 @@ const baseQueryWithReauth = async (
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
+  tagTypes: ["LikedEpisodes"], // Додайте цей рядок
   endpoints: (builder) => ({}),
 });

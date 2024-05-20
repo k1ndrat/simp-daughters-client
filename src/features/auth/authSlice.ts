@@ -2,39 +2,35 @@
 
 import { RootState } from "@/store/store";
 import { createSlice } from "@reduxjs/toolkit";
-import Cookies from "js-cookie";
 
-// get tokens from cookies
-let tokens = {} as Tokens;
-
-if (Cookies.get("tokens")) {
-  tokens = JSON.parse(Cookies.get("tokens") as string);
+let accessToken: string = "";
+if (typeof window !== "undefined" && localStorage.getItem("accessToken")) {
+  accessToken = localStorage.getItem("accessToken") as string;
 }
 
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    tokens: tokens,
+    user: {} as User,
+    accessToken: accessToken,
     error: "",
   },
   reducers: {
     setTokens: (state, action) => {
-      const { tokens } = action.payload;
-      state.tokens = tokens;
+      state.accessToken = action.payload;
     },
     logOut: (state, action) => {
-      state.tokens = {} as Tokens;
-      // Cookies.remove("tokens");
+      state.accessToken = "";
     },
-    setError: (state, action) => {
-      state.error = action.payload;
+    setUser: (state, action) => {
+      state.user = action.payload;
     },
   },
 });
 
-export const { setTokens, logOut, setError } = authSlice.actions;
+export const { setTokens, logOut, setUser } = authSlice.actions;
 
 export default authSlice.reducer;
 
-export const selectCurrentUser = (state: RootState) => state.auth.tokens.user;
-export const selectCurrentTokens = (state: RootState) => state.auth.tokens;
+export const selectCurrentUser = (state: RootState) => state.auth.user;
+export const selectCurrentTokens = (state: RootState) => state.auth.accessToken;

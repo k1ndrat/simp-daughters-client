@@ -10,7 +10,7 @@ const useAuth = () => {
   const tokens = useAppSelector(selectCurrentTokens);
 
   useEffect(() => {
-    setIsAuth(Object.keys(tokens).length !== 0);
+    setIsAuth(Boolean(tokens));
   }, [tokens]);
 
   return { isAuth, tokens };

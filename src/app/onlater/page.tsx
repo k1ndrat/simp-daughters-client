@@ -5,7 +5,9 @@ import Episodes from "@/components/Episodes";
 import { useGetOnLaterEpisodesQuery } from "@/features/episode/episodeApiSlice";
 
 export default function OnLater() {
-  const { data, isLoading, isSuccess } = useGetOnLaterEpisodesQuery(null);
+  const { data, isLoading, isSuccess } = useGetOnLaterEpisodesQuery(null, {
+    refetchOnMountOrArgChange: true,
+  });
 
   return (
     <>

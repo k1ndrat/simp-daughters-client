@@ -1,9 +1,7 @@
 "use client";
 
-import Cookies from "js-cookie";
-
 import { apiSlice } from "@/store/api/apiSlice";
-import { setError, setTokens } from "./authSlice";
+import { logOut, setTokens, setUser } from "./authSlice";
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -22,22 +20,27 @@ export const authApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
-          const { data } = await queryFulfilled;
-          console.log(data);
-          dispatch(setTokens({ tokens: data }));
-          Cookies.set("tokens", JSON.stringify(data), {
-            expires: 7,
-          });
-        } catch (error) {
-          // console.log(error);
-        }
+          const { data }: { data: Tokens } = await queryFulfilled;
+
+          dispatch(setTokens(data.accessToken));
+          dispatch(setUser(data.user));
+
+          localStorage.setItem("accessToken", data.accessToken);
+        } catch (error) {}
       },
     }),
     me: builder.mutation({
       query: (credentials) => ({
-        url: `user/${credentials.id}`,
+        url: `user/me`,
         method: "GET",
       }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data }: { data: User } = await queryFulfilled;
+          console.log(data);
+          dispatch(setUser(data));
+        } catch (error) {}
+      },
     }),
     refresh: builder.mutation({
       query: () => ({
@@ -46,15 +49,28 @@ export const authApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
-          const { data } = await queryFulfilled;
-          const tokens = data.detail.response;
-          dispatch(setTokens({ tokens }));
-          Cookies.set("tokens", JSON.stringify(tokens), {
-            expires: 7,
-          });
+          const { data }: { data: Tokens } = await queryFulfilled;
+          dispatch(setTokens(data.accessToken));
+          dispatch(setUser(data.user));
+
+          localStorage.setItem("accessToken", data.accessToken);
         } catch (err) {
           console.log(err);
         }
+      },
+    }),
+    logout: builder.mutation({
+      query: () => ({
+        url: "/auth/logout",
+        method: "POST",
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(logOut(null));
+
+          localStorage.removeItem("accessToken");
+        } catch (err) {}
       },
     }),
   }),
@@ -65,4 +81,5 @@ export const {
   useLoginMutation,
   useMeMutation,
   // useRefreshMutation,
+  useLogoutMutation,
 } = authApiSlice;

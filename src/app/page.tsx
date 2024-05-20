@@ -6,13 +6,20 @@ import Episodes from "@/components/Episodes";
 import { useGetEpisodesQuery } from "@/features/episode/episodeApiSlice";
 
 export default function Home() {
-  const { data, isLoading, isSuccess } = useGetEpisodesQuery(null);
+  const { data, isLoading, isSuccess, error } = useGetEpisodesQuery(null, {
+    refetchOnMountOrArgChange: true,
+  });
 
   return (
     <>
       <NavBar />
       <main>
-        <Episodes isLoading={isLoading} episodes={data} isSuccess={isSuccess} />
+        <Episodes
+          isLoading={isLoading}
+          episodes={data}
+          isSuccess={isSuccess}
+          error={error}
+        />
       </main>
     </>
   );

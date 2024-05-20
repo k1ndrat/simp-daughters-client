@@ -5,7 +5,9 @@ import Episodes from "@/components/Episodes";
 import { useGetLikedEpisodesQuery } from "@/features/episode/episodeApiSlice";
 
 export default function OnLater() {
-  const { data, isLoading, isSuccess } = useGetLikedEpisodesQuery(null);
+  const { data, isLoading, isSuccess } = useGetLikedEpisodesQuery(null, {
+    refetchOnMountOrArgChange: true,
+  });
 
   return (
     <>

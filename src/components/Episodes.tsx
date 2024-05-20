@@ -9,6 +9,7 @@ interface props {
   isLoading: boolean;
   episodes: any;
   usePercentage?: boolean;
+  error?: any;
 }
 
 const Episodes = ({
@@ -16,11 +17,13 @@ const Episodes = ({
   isLoading,
   episodes,
   usePercentage = true,
+  error,
 }: props) => {
   const isEmpty = episodes && Object.keys(episodes).length === 0;
 
   return (
     <>
+      {error && <p>{error.error}</p>}
       {isLoading && <Loader />}
       {!isLoading && isSuccess && (
         <Container

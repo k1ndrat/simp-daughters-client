@@ -1,45 +1,38 @@
 "use client";
 
-import { Suspense, lazy, useEffect, useState } from "react";
-import { logOut, selectCurrentTokens } from "@/features/auth/authSlice";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { Suspense, useEffect, useState } from "react";
+import { selectCurrentUser } from "@/features/auth/authSlice";
+import { useAppSelector } from "@/store/hooks";
 import { useRouter } from "next/navigation";
 import { Canvas } from "@react-three/fiber";
-
-import Cookies from "js-cookie";
-// import Link from "next/link";
 import Simpson from "@/models/Simpson";
-import useAuth from "@/hooks/useAuth";
+
 import {
   Avatar,
   Box,
-  Button,
-  ButtonProps,
   Container,
   Divider,
   IconButton,
   ListItemIcon,
-  // ListItemIcon,
   Menu,
   MenuItem,
   Tooltip,
   Typography,
-  styled,
 } from "@mui/material";
 import Link from "next/link";
-import { Logout, PersonAdd, Settings } from "@mui/icons-material";
+import { Logout } from "@mui/icons-material";
+import { useLogoutMutation, useMeMutation } from "@/features/auth/authApiSlice";
 
 const NavBar = () => {
   const router = useRouter();
 
-  const { isAuth, tokens } = useAuth();
+  const user = useAppSelector(selectCurrentUser);
+  const [getMe] = useMeMutation();
+  const [logout] = useLogoutMutation();
 
-  const dispatch = useAppDispatch();
-
-  const handleLogout = () => {
-    Cookies.remove("tokens");
-    dispatch(logOut({}));
-
+  const handleLogout = async () => {
+    localStorage.removeItem("accessToken");
+    await logout(null);
     router.push("/login");
   };
 
@@ -53,6 +46,10 @@ const NavBar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    getMe(null);
+  }, []);
 
   return (
     <header
@@ -107,7 +104,7 @@ const NavBar = () => {
             </Suspense>
           </Canvas>
         </Link>
-        {isAuth && tokens.user && (
+        {user?.email && (
           <Box
             component={"div"}
             sx={{
@@ -141,15 +138,7 @@ const NavBar = () => {
               </Typography>
             </Link>
 
-            {/* <Button
-              variant="outlined"
-              sx={{ color: "white" }}
-              onClick={handleLogout}
-            >
-              Log Out
-            </Button> */}
-
-            <Tooltip title={tokens.user?.email}>
+            <Tooltip title={user?.email}>
               <IconButton
                 onClick={handleClick}
                 size="small"
@@ -164,12 +153,12 @@ const NavBar = () => {
                     backgroundColor: "#00a2ff",
                     fontSize: "1rem",
                   }}
-                  src={tokens?.user?.picture && tokens.user.picture}
-                  alt={tokens.user?.name}
+                  src={user?.picture && user.picture}
+                  alt={user?.name}
                 >
-                  {tokens.user?.name.split(" ")[0][0]}
-                  {tokens.user?.name.split(" ").length > 1
-                    ? tokens.user?.name.split(" ")[1][0]
+                  {user?.name.split(" ")[0][0]}
+                  {user?.name.split(" ").length > 1
+                    ? user?.name.split(" ")[1][0]
                     : ""}
                 </Avatar>
               </IconButton>
@@ -191,41 +180,14 @@ const NavBar = () => {
                   ml: -0.5,
                   mr: 1,
                 },
-                // "&::before": {
-                //   content: '""',
-                //   display: "block",
-                //   position: "absolute",
-                //   top: 0,
-                //   right: 14,
-                //   width: 10,
-                //   height: 10,
-                //   bgcolor: "background.paper",
-                //   transform: "translateY(-50%) rotate(45deg)",
-                //   zIndex: 0,
-                // },
               }}
               transformOrigin={{ horizontal: "right", vertical: "top" }}
               anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
               <MenuItem onClick={handleClose} href="profile">
-                <Avatar src={tokens.user?.picture} /> {tokens.user?.name}
+                <Avatar src={user?.picture} /> {user?.name}
               </MenuItem>
-              {/* <MenuItem onClick={handleClose}>
-                <Avatar /> My account
-              </MenuItem> */}
               <Divider />
-              {/* <MenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  <PersonAdd fontSize="small" />
-                </ListItemIcon>
-                Add another account
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  <Settings fontSize="small" />
-                </ListItemIcon>
-                Settings
-              </MenuItem> */}
               <MenuItem onClick={handleLogout}>
                 <ListItemIcon>
                   <Logout fontSize="small" />
