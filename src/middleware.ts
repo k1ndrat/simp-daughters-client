@@ -19,6 +19,7 @@ export default async function middleware(req: NextRequest) {
   // cookies tokens
   let tokens = "";
 
+  console.log(req.cookies);
   if (req.cookies.get("jwt")?.value) {
     tokens = req.cookies.get("jwt")?.value as string;
   }
