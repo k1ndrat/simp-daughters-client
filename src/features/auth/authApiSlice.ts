@@ -2,6 +2,7 @@
 
 import { apiSlice } from "@/store/api/apiSlice";
 import { logOut, setTokens, setUser } from "./authSlice";
+import Cookies from "js-cookie";
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -26,6 +27,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
           dispatch(setUser(data.user));
 
           localStorage.setItem("accessToken", data.accessToken);
+          Cookies.set("jwt", data.accessToken, { expires: 7 });
         } catch (error) {}
       },
     }),

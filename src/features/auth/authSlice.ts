@@ -3,16 +3,24 @@
 import { RootState } from "@/store/store";
 import { createSlice } from "@reduxjs/toolkit";
 
-let accessToken: string = "";
-if (typeof window !== "undefined" && localStorage.getItem("accessToken")) {
-  accessToken = localStorage.getItem("accessToken") as string;
+import Cookies from "js-cookie";
+
+// let accessToken: string = "";
+// if (typeof window !== "undefined" && localStorage.getItem("accessToken")) {
+//   accessToken = localStorage.getItem("accessToken") as string;
+// }
+
+// get tokens from cookies
+let tokens = {} as Tokens;
+if (Cookies.get("tokens")) {
+  tokens = JSON.parse(Cookies.get("tokens") as string);
 }
 
 const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: {} as User,
-    accessToken: accessToken,
+    accessToken: tokens.accessToken,
     error: "",
   },
   reducers: {
