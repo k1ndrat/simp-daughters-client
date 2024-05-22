@@ -1,8 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
-import { selectCurrentUser } from "@/features/auth/authSlice";
-import { useAppSelector } from "@/store/hooks";
+import { Suspense, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Canvas } from "@react-three/fiber";
 import Simpson from "@/models/Simpson";
@@ -21,17 +19,17 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { Logout } from "@mui/icons-material";
-import { useLogoutMutation, useMeMutation } from "@/features/auth/authApiSlice";
+import { useLogoutMutation } from "@/features/auth/authApiSlice";
+import useAuth from "@/hooks/useAuth";
 
 const NavBar = () => {
   const router = useRouter();
 
-  const user = useAppSelector(selectCurrentUser);
-  const [getMe] = useMeMutation();
+  const { isAuth, user } = useAuth();
+
   const [logout] = useLogoutMutation();
 
   const handleLogout = async () => {
-    localStorage.removeItem("accessToken");
     await logout(null);
     router.push("/login");
   };
@@ -46,10 +44,6 @@ const NavBar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  useEffect(() => {
-    getMe(null);
-  }, []);
 
   return (
     <header
@@ -104,7 +98,7 @@ const NavBar = () => {
             </Suspense>
           </Canvas>
         </Link>
-        {user?.email && (
+        {isAuth && user?.email && (
           <Box
             component={"div"}
             sx={{

@@ -5,11 +5,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import Cookies from "js-cookie";
 
-// let accessToken: string = "";
-// if (typeof window !== "undefined" && localStorage.getItem("accessToken")) {
-//   accessToken = localStorage.getItem("accessToken") as string;
-// }
-
 // get tokens from cookies
 let tokens = {} as Tokens;
 if (Cookies.get("tokens")) {
@@ -19,16 +14,16 @@ if (Cookies.get("tokens")) {
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: {} as User,
-    accessToken: tokens.accessToken,
+    user: tokens.user,
+    tokens: tokens,
     error: "",
   },
   reducers: {
     setTokens: (state, action) => {
-      state.accessToken = action.payload;
+      state.tokens = action.payload;
     },
     logOut: (state, action) => {
-      state.accessToken = "";
+      state.tokens = {} as Tokens;
     },
     setUser: (state, action) => {
       state.user = action.payload;
@@ -41,4 +36,4 @@ export const { setTokens, logOut, setUser } = authSlice.actions;
 export default authSlice.reducer;
 
 export const selectCurrentUser = (state: RootState) => state.auth.user;
-export const selectCurrentTokens = (state: RootState) => state.auth.accessToken;
+export const selectCurrentTokens = (state: RootState) => state.auth.tokens;

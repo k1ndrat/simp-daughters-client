@@ -7,7 +7,7 @@ import { useGetEpisodesQuery } from "@/features/episode/episodeApiSlice";
 
 export default function Home() {
   const { data, isLoading, isSuccess, error } = useGetEpisodesQuery(null, {
-    refetchOnMountOrArgChange: true,
+    refetchOnMountOrArgChange: 0,
   });
 
   return (

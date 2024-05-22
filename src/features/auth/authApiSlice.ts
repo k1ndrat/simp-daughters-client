@@ -23,11 +23,10 @@ export const authApiSlice = apiSlice.injectEndpoints({
         try {
           const { data }: { data: Tokens } = await queryFulfilled;
 
-          dispatch(setTokens(data.accessToken));
+          dispatch(setTokens(data));
           dispatch(setUser(data.user));
 
-          localStorage.setItem("accessToken", data.accessToken);
-          Cookies.set("jwt", data.accessToken, { expires: 7 });
+          Cookies.set("tokens", JSON.stringify(data), { expires: 7 });
         } catch (error) {}
       },
     }),
@@ -39,7 +38,6 @@ export const authApiSlice = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data }: { data: User } = await queryFulfilled;
-          console.log(data);
           dispatch(setUser(data));
         } catch (error) {}
       },
@@ -52,13 +50,11 @@ export const authApiSlice = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data }: { data: Tokens } = await queryFulfilled;
-          dispatch(setTokens(data.accessToken));
+          dispatch(setTokens(data));
           dispatch(setUser(data.user));
 
-          localStorage.setItem("accessToken", data.accessToken);
-        } catch (err) {
-          console.log(err);
-        }
+          Cookies.set("tokens", JSON.stringify(data), { expires: 7 });
+        } catch (err) {}
       },
     }),
     logout: builder.mutation({
@@ -71,7 +67,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
           await queryFulfilled;
           dispatch(logOut(null));
 
-          localStorage.removeItem("accessToken");
+          Cookies.remove("tokens");
         } catch (err) {}
       },
     }),

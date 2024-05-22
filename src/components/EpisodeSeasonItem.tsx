@@ -22,8 +22,6 @@ const EpisodeSeasonItem = ({ episodes, season, usePercentage }: props) => {
       whileInView={{ opacity: 1 }}
       transition={{
         type: "spring",
-        // stiffness: 50,
-        // damping: 20,
         delay: 0.1,
         duration: 1.5,
       }}

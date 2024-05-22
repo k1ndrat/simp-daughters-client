@@ -13,7 +13,7 @@ const useAuth = () => {
     setIsAuth(Boolean(tokens));
   }, [tokens]);
 
-  return { isAuth, tokens };
+  return { isAuth, tokens, user: tokens.user };
 };
 
 export default useAuth;

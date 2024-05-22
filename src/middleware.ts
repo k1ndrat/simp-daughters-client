@@ -17,19 +17,18 @@ export default async function middleware(req: NextRequest) {
   }
 
   // cookies tokens
-  let tokens = "";
+  let tokens = {} as Tokens;
 
-  console.log(req.cookies);
-  if (req.cookies.get("jwt")?.value) {
-    tokens = req.cookies.get("jwt")?.value as string;
+  if (req.cookies.get("tokens")?.value) {
+    tokens = JSON.parse(req.cookies.get("tokens")?.value as string);
   }
 
-  if (!tokens && protectedRoutes.includes(req.nextUrl.pathname)) {
+  if (!tokens?.accessToken && protectedRoutes.includes(req.nextUrl.pathname)) {
     const absoluteUrl = new URL("/login", req.nextUrl.origin);
     return NextResponse.redirect(absoluteUrl.toString());
   }
 
-  if (tokens && authRoutes.includes(req.nextUrl.pathname)) {
+  if (tokens?.accessToken && authRoutes.includes(req.nextUrl.pathname)) {
     const absoluteUrl = new URL("/", req.nextUrl.origin);
     return NextResponse.redirect(absoluteUrl.toString());
   }

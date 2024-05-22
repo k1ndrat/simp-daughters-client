@@ -1,7 +1,6 @@
-import { Container, Typography } from "@mui/material";
+import { Container } from "@mui/material";
 import EpisodeSeasonItem from "./EpisodeSeasonItem";
 import Loader from "./Loader";
-import { QueryStatus } from "@reduxjs/toolkit/query";
 import { motion } from "framer-motion";
 
 interface props {

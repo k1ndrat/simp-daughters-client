@@ -13,9 +13,9 @@ const baseQuery = fetchBaseQuery({
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const state = getState() as RootState;
-    const token = state.auth.accessToken;
+    const token = state.auth.tokens.accessToken;
 
-    headers.set("Authorization", `Bearer ${token}`);
+    if (token) headers.set("Authorization", `Bearer ${token}`);
 
     return headers;
   },
@@ -31,10 +31,16 @@ const baseQueryWithReauth = async (
   if (result?.error?.status === 403) {
     console.log("sending refresh token");
 
+    const state = api.getState() as RootState;
+    const refreshToken = state.auth.tokens?.refreshToken;
+
     const refreshData = await fetch(
       (process.env.NEXT_PUBLIC_BASE_URL + "/auth/refresh") as string,
       {
         method: "POST",
+        headers: {
+          authorization: `REFRESH ${refreshToken}`,
+        },
         credentials: "include",
       }
     );
@@ -42,10 +48,10 @@ const baseQueryWithReauth = async (
     const refreshResult: Tokens = await refreshData.json();
 
     if (refreshResult) {
-      localStorage.setItem("accessToken", refreshResult.accessToken);
+      Cookies.set("tokens", JSON.stringify(refreshResult), { expires: 7 });
 
       // store the new token
-      api.dispatch(setTokens(refreshResult.accessToken));
+      api.dispatch(setTokens(refreshResult));
       api.dispatch(setUser(refreshResult.user));
 
       // retry the original query with the new access token
@@ -60,6 +66,6 @@ const baseQueryWithReauth = async (
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["LikedEpisodes"], // Додайте цей рядок
+  keepUnusedDataFor: 0.0001,
   endpoints: (builder) => ({}),
 });

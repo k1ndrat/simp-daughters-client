@@ -6,15 +6,12 @@ export const episodeApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getEpisodes: builder.query<Episodes, null>({
       query: () => ({ url: `/episode` }),
-      providesTags: ["LikedEpisodes"],
     }),
     getOnLaterEpisodes: builder.query<Episodes, null>({
       query: () => ({ url: `/episode/onlater` }),
-      providesTags: ["LikedEpisodes"],
     }),
     getLikedEpisodes: builder.query<Episodes, null>({
       query: () => ({ url: `/episode/liked` }),
-      providesTags: ["LikedEpisodes"],
     }),
     updateState: builder.mutation({
       query: (credentials) => ({
@@ -22,7 +19,6 @@ export const episodeApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: credentials.state,
       }),
-      // invalidatesTags: ["LikedEpisodes"],
     }),
   }),
 });
