@@ -6,7 +6,7 @@ import { useFrame } from "@react-three/fiber";
 import { Mesh } from "three";
 
 const Simpson = () => {
-  const { scene } = useGLTF("/models/huinaebana.glb");
+  const { scene } = useGLTF("/models/homer.glb");
   const myMesh = useRef<Mesh>(null!);
 
   // mouse position
